@@ -30,7 +30,7 @@ private:
 
     G4double WorldSize;
     std::unique_ptr<G4Material> WorldMaterial;
-    std::unique_ptr<G4Box> WorldBox;
+    std::unique_ptr<G4Sphere> WorldSphere;
     std::unique_ptr<G4LogicalVolume> WorldLogicalVolume;
     std::unique_ptr<G4PVPlacement> WorldPhysicalVolume;
 
@@ -44,6 +44,7 @@ private:
     G4double ShieldingToDetectorBufferDistance;
     G4double DistanceFromInteractionPointToDetector;
     G4double DetectorThickness;
+    std::unique_ptr<G4Material> DetectorMaterial;
     std::unique_ptr<G4Sphere> DetectorSphere;
     std::unique_ptr<G4LogicalVolume> DetectorLogicalVolume;
     std::unique_ptr<G4PVPlacement> DetectorPhysicalVolume;
