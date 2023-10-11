@@ -1,9 +1,10 @@
 #include <G4MTRunManager.hh>
-#include <QGSP_BIC_HP.hh>
+#include <QGSP_BIC_AllHP.hh>
 #include <G4SteppingVerbose.hh>
 #include <G4UImanager.hh>
 #include <G4VisExecutive.hh>
 #include <G4UIExecutive.hh>
+#include <G4HadronPhysicsQGSP_BIC_AllHP.hh>
 
 #include <DetectorConstruction.h>
 #include <ActionInitialization.h>
@@ -18,7 +19,12 @@ int main(int argc, char **argv) {
     auto runManager = new G4MTRunManager();
 
     runManager->SetUserInitialization(new DetectorConstruction());
-    runManager->SetUserInitialization(new QGSP_BIC_HP());
+    auto physicsList = new QGSP_BIC_AllHP();
+    G4HadronPhysicsQGSP_BIC_AllHP* inelasticHadronPhys = (G4HadronPhysicsQGSP_BIC_AllHP*) physicsList->GetPhysics("hInelastic QGSP_BIC_AllHP");
+    if (inelasticHadronPhys) {
+        std::cout << "Found Inelastic Hadronic Physics Model." << std::endl;
+    }
+    runManager->SetUserInitialization(physicsList);
     runManager->SetUserInitialization(new ActionInitialization());
 
     G4VisManager *visManager = new G4VisExecutive;
