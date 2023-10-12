@@ -4,10 +4,10 @@
 #include <G4UImanager.hh>
 #include <G4VisExecutive.hh>
 #include <G4UIExecutive.hh>
-#include <G4HadronPhysicsQGSP_BIC_AllHP.hh>
 
 #include <DetectorConstruction.h>
 #include <ActionInitialization.h>
+#include <BiasingPhysics.h>
 
 int main(int argc, char **argv) {
     G4UIExecutive *ui = nullptr;
@@ -20,10 +20,7 @@ int main(int argc, char **argv) {
 
     runManager->SetUserInitialization(new DetectorConstruction());
     auto physicsList = new QGSP_BIC_AllHP();
-    G4HadronPhysicsQGSP_BIC_AllHP* inelasticHadronPhys = (G4HadronPhysicsQGSP_BIC_AllHP*) physicsList->GetPhysics("hInelastic QGSP_BIC_AllHP");
-    if (inelasticHadronPhys) {
-        std::cout << "Found Inelastic Hadronic Physics Model." << std::endl;
-    }
+    physicsList->RegisterPhysics(new BiasingPhysics());
     runManager->SetUserInitialization(physicsList);
     runManager->SetUserInitialization(new ActionInitialization());
 

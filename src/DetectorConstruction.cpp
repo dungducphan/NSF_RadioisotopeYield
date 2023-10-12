@@ -29,7 +29,7 @@ G4VPhysicalVolume *DetectorConstruction::Construct() {
     WorldLogicalVolume->SetVisAttributes(VAWorld);
 
     // Shielding volume
-    ShieldingMaterial.reset(NISTManager->FindOrBuildMaterial("G4_Pb"));
+    ShieldingMaterial.reset(NISTManager->FindOrBuildMaterial("G4_Cu"));
     ShieldingSphere = std::make_unique<G4Sphere>("ShieldingSphere", DistanceFromInteractionPointToShielding, DistanceFromInteractionPointToShielding + ShieldingThickness, 0., 360. * deg, 0., 180. * deg);
     ShieldingLogicalVolume = std::make_unique<G4LogicalVolume>(ShieldingSphere.get(), ShieldingMaterial.get(), "ShieldingLogicalVolume");
     ShieldingPhysicalVolume = std::make_unique<G4PVPlacement>(nullptr, G4ThreeVector(), ShieldingLogicalVolume.get(), "ShieldingPhysicalVolume", WorldLogicalVolume.get(), false, 0, CheckOverlaps);
@@ -39,7 +39,7 @@ G4VPhysicalVolume *DetectorConstruction::Construct() {
     ShieldingLogicalVolume->SetVisAttributes(VAShielding);
 
     // Detector volume
-    DetectorMaterial.reset(NISTManager->FindOrBuildMaterial("G4_Pb"));
+    DetectorMaterial.reset(NISTManager->FindOrBuildMaterial("G4_Rh"));
     DetectorSphere = std::make_unique<G4Sphere>("DetectorSphere", DistanceFromInteractionPointToDetector, DistanceFromInteractionPointToDetector + DetectorThickness, 0., 360. * deg, 0., 180. * deg);
     DetectorLogicalVolume = std::make_unique<G4LogicalVolume>(DetectorSphere.get(), DetectorMaterial.get(), "DetectorLogicalVolume");
     DetectorPhysicalVolume = std::make_unique<G4PVPlacement>(nullptr, G4ThreeVector(), DetectorLogicalVolume.get(), "DetectorPhysicalVolume", WorldLogicalVolume.get(), false, 0, CheckOverlaps);
