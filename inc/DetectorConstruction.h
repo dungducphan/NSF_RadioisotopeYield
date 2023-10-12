@@ -3,7 +3,7 @@
 #include <utility>
 #include <tuple>
 #include <fstream>
-
+#include <memory>
 
 #include <G4VUserDetectorConstruction.hh>
 #include <G4Sphere.hh>
@@ -13,6 +13,7 @@
 #include <G4SystemOfUnits.hh>
 #include <G4SDManager.hh>
 #include <G4NistManager.hh>
+#include <G4Isotope.hh>
 #include <G4VisAttributes.hh>
 
 #include <TMath.h>
@@ -25,14 +26,29 @@ public:
     G4VPhysicalVolume* Construct() override;
     void ConstructSDandField() override;
 
+    [[nodiscard]] G4LogicalVolume* GetScoringVolume() const {
+        return ScoringVolume.get();
+    }
+
+    void DefineMaterials();
+
 private:
     bool CheckOverlaps;
+
+    std::unique_ptr<G4NistManager> NISTManager;
 
     G4double WorldSize;
     std::unique_ptr<G4Material> WorldMaterial;
     std::unique_ptr<G4Sphere> WorldSphere;
     std::unique_ptr<G4LogicalVolume> WorldLogicalVolume;
     std::unique_ptr<G4PVPlacement> WorldPhysicalVolume;
+
+    G4double HeavyWaterResidualThickness;
+    G4double DistanceFromInteractionPointToHeavyWaterResidual;
+    std::unique_ptr<G4Material> HeavyWaterResidualMaterial;
+    std::unique_ptr<G4Sphere> HeavyWaterResidualSphere;
+    std::unique_ptr<G4LogicalVolume> HeavyWaterResidualLogicalVolume;
+    std::unique_ptr<G4PVPlacement> HeavyWaterResidualPhysicalVolume;
 
     G4double ShieldingThickness;
     G4double DistanceFromInteractionPointToShielding;
@@ -49,5 +65,6 @@ private:
     std::unique_ptr<G4LogicalVolume> DetectorLogicalVolume;
     std::unique_ptr<G4PVPlacement> DetectorPhysicalVolume;
 
-    std::unique_ptr<G4NistManager> NISTManager;
+protected:
+    std::unique_ptr<G4LogicalVolume> ScoringVolume;
 };
