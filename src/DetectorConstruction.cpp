@@ -10,7 +10,7 @@ DetectorConstruction::DetectorConstruction() :  G4VUserDetectorConstruction() {
     DistanceFromInteractionPointToHeavyWaterResidual = 0.15 * cm;
     ShieldingThickness = 0.5 * cm;
     DistanceFromInteractionPointToShielding = DistanceFromInteractionPointToHeavyWaterResidual + HeavyWaterResidualThickness;
-    DetectorThickness = 1 * cm; // = 100 * micrometer; // FIXME
+    DetectorThickness = 100 * micrometer;
     DistanceFromInteractionPointToDetector = DistanceFromInteractionPointToShielding + ShieldingThickness;
 }
 
@@ -27,22 +27,22 @@ G4VPhysicalVolume *DetectorConstruction::Construct() {
     VAWorld->SetVisibility(false);
     WorldLogicalVolume->SetVisAttributes(VAWorld);
 
-//    // Heavy Water volume
-//    HeavyWaterResidualSphere = std::make_unique<G4Sphere>("HeavyWaterResidualSphere", DistanceFromInteractionPointToHeavyWaterResidual, DistanceFromInteractionPointToHeavyWaterResidual + HeavyWaterResidualThickness, 0., 360. * deg, 0., 180. * deg);
-//    HeavyWaterResidualLogicalVolume = std::make_unique<G4LogicalVolume>(HeavyWaterResidualSphere.get(), HeavyWaterResidualMaterial.get(), "HeavyWaterResidualLogicalVolume");
-//    HeavyWaterResidualPhysicalVolume = std::make_unique<G4PVPlacement>(nullptr, G4ThreeVector(), HeavyWaterResidualLogicalVolume.get(), "HeavyWaterResidualPhysicalVolume", WorldLogicalVolume.get(), false, 0, CheckOverlaps);
-//    auto VAHeavyWaterResidual = new G4VisAttributes();
-//    VAHeavyWaterResidual->SetForceSolid();
-//    VAHeavyWaterResidual->SetColour(0., 0., 1., 0.8);
-//    HeavyWaterResidualLogicalVolume->SetVisAttributes(VAHeavyWaterResidual);
+    // Heavy Water volume
+    HeavyWaterResidualSphere = std::make_unique<G4Sphere>("HeavyWaterResidualSphere", DistanceFromInteractionPointToHeavyWaterResidual, DistanceFromInteractionPointToHeavyWaterResidual + HeavyWaterResidualThickness, 0., 360. * deg, 0., 180. * deg);
+    HeavyWaterResidualLogicalVolume = std::make_unique<G4LogicalVolume>(HeavyWaterResidualSphere.get(), HeavyWaterResidualMaterial.get(), "HeavyWaterResidualLogicalVolume");
+    HeavyWaterResidualPhysicalVolume = std::make_unique<G4PVPlacement>(nullptr, G4ThreeVector(), HeavyWaterResidualLogicalVolume.get(), "HeavyWaterResidualPhysicalVolume", WorldLogicalVolume.get(), false, 0, CheckOverlaps);
+    auto VAHeavyWaterResidual = new G4VisAttributes();
+    VAHeavyWaterResidual->SetForceSolid();
+    VAHeavyWaterResidual->SetColour(0., 0., 1., 0.8);
+    HeavyWaterResidualLogicalVolume->SetVisAttributes(VAHeavyWaterResidual);
 
-//    // Shielding volume
-//    ShieldingSphere = std::make_unique<G4Sphere>("ShieldingSphere", DistanceFromInteractionPointToShielding, DistanceFromInteractionPointToShielding + ShieldingThickness, 0., 360. * deg, 0., 180. * deg);
-//    ShieldingLogicalVolume = std::make_unique<G4LogicalVolume>(ShieldingSphere.get(), ShieldingMaterial.get(), "ShieldingLogicalVolume");
-//    ShieldingPhysicalVolume = std::make_unique<G4PVPlacement>(nullptr, G4ThreeVector(), ShieldingLogicalVolume.get(), "ShieldingPhysicalVolume", WorldLogicalVolume.get(), false, 0, CheckOverlaps);
-//    auto VAShielding = new G4VisAttributes();
-//    VAShielding->SetVisibility(false);
-//    ShieldingLogicalVolume->SetVisAttributes(VAShielding);
+    // Shielding volume
+    ShieldingSphere = std::make_unique<G4Sphere>("ShieldingSphere", DistanceFromInteractionPointToShielding, DistanceFromInteractionPointToShielding + ShieldingThickness, 0., 360. * deg, 0., 180. * deg);
+    ShieldingLogicalVolume = std::make_unique<G4LogicalVolume>(ShieldingSphere.get(), ShieldingMaterial.get(), "ShieldingLogicalVolume");
+    ShieldingPhysicalVolume = std::make_unique<G4PVPlacement>(nullptr, G4ThreeVector(), ShieldingLogicalVolume.get(), "ShieldingPhysicalVolume", WorldLogicalVolume.get(), false, 0, CheckOverlaps);
+    auto VAShielding = new G4VisAttributes();
+    VAShielding->SetVisibility(false);
+    ShieldingLogicalVolume->SetVisAttributes(VAShielding);
 
     // Detector volume
     DetectorSphere = std::make_unique<G4Sphere>("DetectorSphere", DistanceFromInteractionPointToDetector, DistanceFromInteractionPointToDetector + DetectorThickness, 0., 360. * deg, 0., 180. * deg);
