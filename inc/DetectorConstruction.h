@@ -26,9 +26,7 @@ public:
     G4VPhysicalVolume* Construct() override;
     void ConstructSDandField() override;
 
-    [[nodiscard]] G4LogicalVolume* GetScoringVolume() const {
-        return ScoringVolume.get();
-    }
+    void CreateImportanceStore();
 
     void DefineMaterials();
 
@@ -38,33 +36,35 @@ private:
     std::unique_ptr<G4NistManager> NISTManager;
 
     G4double WorldSize;
+    G4double TotalHeavyWaterThickness;
+    G4double TotalShieldingThickness;
+    G4double TotalDetectorThickness;
+    G4double HeavyWaterCellThickness;
+    G4double ShieldingCellThickness;
+    G4double DetectorCellThickness;
+    G4int    NumberOfHeavyWaterLayers;
+    G4int    NumberOfShieldingLayers;
+    G4int    NumberOfDetectorLayers;
+
+
     std::unique_ptr<G4Material> WorldMaterial;
+    std::unique_ptr<G4Material> HeavyWaterResidualMaterial;
+    std::unique_ptr<G4Material> ShieldingMaterial;
+    std::unique_ptr<G4Material> DetectorMaterial;
+
     std::unique_ptr<G4Sphere> WorldSphere;
     std::unique_ptr<G4LogicalVolume> WorldLogicalVolume;
     std::unique_ptr<G4PVPlacement> WorldPhysicalVolume;
 
-    G4double HeavyWaterResidualThickness;
-    G4double DistanceFromInteractionPointToHeavyWaterResidual;
-    std::unique_ptr<G4Material> HeavyWaterResidualMaterial;
-    std::unique_ptr<G4Sphere> HeavyWaterResidualSphere;
-    std::unique_ptr<G4LogicalVolume> HeavyWaterResidualLogicalVolume;
-    std::unique_ptr<G4PVPlacement> HeavyWaterResidualPhysicalVolume;
+    std::vector<std::unique_ptr<G4Sphere>> HeavyWaterResidualSphere;
+    std::vector<std::unique_ptr<G4LogicalVolume>> HeavyWaterResidualLogicalVolume;
+    std::vector<std::unique_ptr<G4PVPlacement>> HeavyWaterResidualPhysicalVolume;
 
-    G4double ShieldingThickness;
-    G4double DistanceFromInteractionPointToShielding;
-    std::unique_ptr<G4Material> ShieldingMaterial;
-    std::unique_ptr<G4Sphere> ShieldingSphere;
-    std::unique_ptr<G4LogicalVolume> ShieldingLogicalVolume;
-    std::unique_ptr<G4PVPlacement> ShieldingPhysicalVolume;
+    std::vector<std::unique_ptr<G4Sphere>> ShieldingSphere;
+    std::vector<std::unique_ptr<G4LogicalVolume>> ShieldingLogicalVolume;
+    std::vector<std::unique_ptr<G4PVPlacement>> ShieldingPhysicalVolume;
 
-    G4double ShieldingToDetectorBufferDistance;
-    G4double DistanceFromInteractionPointToDetector;
-    G4double DetectorThickness;
-    std::unique_ptr<G4Material> DetectorMaterial;
-    std::unique_ptr<G4Sphere> DetectorSphere;
-    std::unique_ptr<G4LogicalVolume> DetectorLogicalVolume;
-    std::unique_ptr<G4PVPlacement> DetectorPhysicalVolume;
-
-protected:
-    std::unique_ptr<G4LogicalVolume> ScoringVolume;
+    std::vector<std::unique_ptr<G4Sphere>> DetectorSphere;
+    std::vector<std::unique_ptr<G4LogicalVolume>> DetectorLogicalVolume;
+    std::vector<std::unique_ptr<G4PVPlacement>> DetectorPhysicalVolume;
 };
