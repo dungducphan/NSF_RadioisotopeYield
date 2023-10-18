@@ -16,11 +16,11 @@
 
 class PrimaryGenerator : public G4VUserPrimaryGeneratorAction{
 public:
-    PrimaryGenerator();
+    PrimaryGenerator(const double &energyInMeV);
     ~PrimaryGenerator() override;
 
     void GeneratePrimaries(G4Event* anEvent) override;
 
 private:
-    std::unique_ptr<G4GeneralParticleSource> GeneralParticleSource;
+    G4GeneralParticleSource* GeneralParticleSource;
 };
