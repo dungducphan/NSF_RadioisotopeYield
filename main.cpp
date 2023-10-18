@@ -4,6 +4,8 @@
 #include <G4UImanager.hh>
 #include <G4VisExecutive.hh>
 #include <G4UIExecutive.hh>
+#include <G4GeometrySampler.hh>
+#include <G4ImportanceBiasing.hh>
 
 #include <DetectorConstruction.h>
 #include <ActionInitialization.h>
@@ -11,18 +13,34 @@
 
 int main(int argc, char **argv) {
     G4UIExecutive *ui = nullptr;
-    if (argc == 1) ui = new G4UIExecutive(argc, argv);
+
+    double energyInMeV = 0.0;
+    if (argc == 2) {
+        ui = new G4UIExecutive(argc, argv);
+        energyInMeV = std::stod(argv[1]);
+    } else if (argc == 3) {
+        energyInMeV = std::stod(argv[1]);
+    } else {
+        G4cout << "Usage: " << argv[0] << " <Primary Particle Energy in MeV> [optional: macro_file]" << G4endl;
+        return 0;
+    }
 
     G4int precision = 4;
     G4SteppingVerbose::UseBestUnit(precision);
 
     auto runManager = new G4MTRunManager();
 
-    runManager->SetUserInitialization(new DetectorConstruction());
+    auto detectorConstruction = new DetectorConstruction();
+    runManager->SetUserInitialization(detectorConstruction);
+//    G4GeometrySampler mgs(detectorConstruction->GetWorldVolume(),"deuteron");
     auto physicsList = new QGSP_BIC_AllHP();
-    physicsList->RegisterPhysics(new BiasingPhysics());
+//     physicsList->RegisterPhysics(new BiasingPhysics());
+//    physicsList->RegisterPhysics(new G4ImportanceBiasing(&mgs));
     runManager->SetUserInitialization(physicsList);
-    runManager->SetUserInitialization(new ActionInitialization());
+    runManager->SetUserInitialization(new ActionInitialization(energyInMeV));
+
+//    runManager->Initialize();
+//    detectorConstruction->CreateImportanceStore();
 
     G4VisManager *visManager = new G4VisExecutive;
     visManager->Initialize();
@@ -31,7 +49,7 @@ int main(int argc, char **argv) {
 
     if (!ui) {
         G4String command = "/control/execute ";
-        G4String fileName = argv[1];
+        G4String fileName = argv[2];
         UIManager->ApplyCommand(command + fileName);
     } else {
         UIManager->ApplyCommand("/control/execute vis.mac");
