@@ -10,5 +10,5 @@ public:
     void ConstructProcess() override;
 
 private:
-    void BiasingDeuteronHPCrossSection();
+    static void BiasingDeuteronHPCrossSection();
 };
