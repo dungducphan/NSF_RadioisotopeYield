@@ -9,6 +9,7 @@ ParticleSD::~ParticleSD() = default;
 G4bool ParticleSD::ProcessHits(G4Step * aStep, G4TouchableHistory *) {
     auto particle = aStep->GetTrack()->GetDefinition();
     if (particle != DeuteronDefinition) {
+        aStep->GetTrack()->SetTrackStatus(fStopAndKill);
         return false;
     }
 
