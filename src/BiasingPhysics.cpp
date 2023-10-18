@@ -10,13 +10,6 @@ void BiasingPhysics::ConstructParticle() {}
 
 void BiasingPhysics::ConstructProcess() {
      BiasingDeuteronHPCrossSection();
-//    G4ProcessVector* pGenericIonProcessVec = G4GenericIon::GenericIon()->GetProcessManager()->GetProcessList();
-//    for (size_t i = 0; i < pGenericIonProcessVec->size(); i++) {
-//        std::cout << (*pGenericIonProcessVec)[i]->GetProcessName() << std::endl;
-//        if ((*pGenericIonProcessVec)[i]->GetProcessName() == "dInelastic") {
-//            std::cout << "Found ParticleHPInelastic process!" << std::endl;
-//        }
-//    }
 }
 
 void BiasingPhysics::BiasingDeuteronHPCrossSection() {
