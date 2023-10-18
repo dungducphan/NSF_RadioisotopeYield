@@ -11,12 +11,12 @@ DetectorConstruction::DetectorConstruction() :  G4VUserDetectorConstruction() {
     NumberOfHeavyWaterLayers = 5;
     HeavyWaterCellThickness = TotalHeavyWaterThickness / NumberOfHeavyWaterLayers;
     TotalShieldingThickness = 0.3 * mm;
-    NumberOfShieldingLayers = 1;
+    NumberOfShieldingLayers = 3;
     ShieldingCellThickness = TotalShieldingThickness / NumberOfShieldingLayers;
     TotalDetectorThickness = 0.1 * mm;
     NumberOfDetectorLayers = 1;
     DetectorCellThickness = TotalDetectorThickness / NumberOfDetectorLayers;
-    WorldSize = TotalHeavyWaterThickness + TotalShieldingThickness + TotalDetectorThickness + 1 * cm;
+    WorldSize = TotalHeavyWaterThickness + TotalShieldingThickness + TotalDetectorThickness + 1 * mm;
 }
 
 DetectorConstruction::~DetectorConstruction() = default;
@@ -108,9 +108,9 @@ G4VIStore* DetectorConstruction::CreateImportanceStore() {
         istore->AddImportanceGeometryCell(TMath::Power(2, (double) NumberOfHeavyWaterLayers + (double) i - 1), *ShieldingPhysicalVolume[i]);
 
     for (unsigned int i = 0; i < NumberOfDetectorLayers; i++)
-        istore->AddImportanceGeometryCell(TMath::Power(2, (double) (NumberOfHeavyWaterLayers + NumberOfShieldingLayers - 2)), *DetectorPhysicalVolume[i]);
+        istore->AddImportanceGeometryCell(TMath::Power(2, (double) (NumberOfHeavyWaterLayers + NumberOfShieldingLayers + (double) i - 2)), *DetectorPhysicalVolume[i]);
 
-    istore->AddImportanceGeometryCell(TMath::Power(2, (double) (NumberOfHeavyWaterLayers + NumberOfShieldingLayers - 2)), *WorldPhysicalVolume);
+    istore->AddImportanceGeometryCell(TMath::Power(2, (double) (NumberOfHeavyWaterLayers + NumberOfShieldingLayers + NumberOfDetectorLayers - 3)), *WorldPhysicalVolume);
 
     return istore;
 }
