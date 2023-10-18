@@ -13,8 +13,6 @@ G4bool ParticleSD::ProcessHits(G4Step * aStep, G4TouchableHistory *) {
         return false;
     }
 
-    std::cout << "--------------------------------------------------------------------------Weight of deuteron: " << aStep->GetTrack()->GetWeight() << std::endl;
-
     auto prePoint = aStep->GetPreStepPoint();
     G4double energy = prePoint->GetKineticEnergy();
 
