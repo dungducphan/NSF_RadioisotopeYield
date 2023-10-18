@@ -1,15 +1,23 @@
 #include <ParticleSD.h>
 
-ParticleSD::ParticleSD(const G4String& name) : G4VSensitiveDetector(name) {}
+ParticleSD::ParticleSD(const G4String& name) : G4VSensitiveDetector(name) {
+    DeuteronDefinition = G4ParticleTable::GetParticleTable()->FindParticle("deuteron");
+}
 
 ParticleSD::~ParticleSD() = default;
 
 G4bool ParticleSD::ProcessHits(G4Step * aStep, G4TouchableHistory *) {
     auto particle = aStep->GetTrack()->GetDefinition();
-    if (particle->IsGeneralIon()) {
-        G4cout << "Registered a nucleus: " << particle->GetParticleName() << G4endl;
-        G4cout << "Lifetime: " << particle->GetPDGLifeTime() / picosecond << " picoseconds." << G4endl;
+    if (particle != DeuteronDefinition) {
+        return false;
     }
+
+    auto prePoint = aStep->GetPreStepPoint();
+    G4double energy = prePoint->GetKineticEnergy();
+
+    G4AnalysisManager *man = G4AnalysisManager::Instance();
+    man->FillNtupleDColumn(0, energy / MeV);
+    man->AddNtupleRow();
 
     return true;
 }
