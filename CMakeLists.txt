@@ -13,7 +13,7 @@ include(${ROOT_USE_FILE})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/inc/*.h)
 
-file(GLOB MACROS *.mac)
+file(GLOB MACROS *.mac *.py)
 
 file(COPY ${MACROS} DESTINATION ${PROJECT_BINARY_DIR})
 file(COPY ${EXT_DATA} DESTINATION ${PROJECT_BINARY_DIR})

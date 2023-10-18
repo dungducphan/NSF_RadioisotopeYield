@@ -19,6 +19,5 @@ G4bool ParticleSD::ProcessHits(G4Step * aStep, G4TouchableHistory *) {
     man->FillNtupleDColumn(0, energy / MeV);
     man->AddNtupleRow();
 
-    aStep->GetTrack()->SetTrackStatus(fStopAndKill);
     return true;
 }
