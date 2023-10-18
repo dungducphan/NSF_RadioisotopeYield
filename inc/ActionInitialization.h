@@ -7,9 +7,11 @@
 
 class ActionInitialization : public G4VUserActionInitialization {
 public:
-    ActionInitialization();
+    explicit ActionInitialization(const double &energyInMeV);
     ~ActionInitialization() override;
 
     void BuildForMaster() const override;
     void Build() const override;
+
+    double PrimaryEnergyInMeV;
 };
