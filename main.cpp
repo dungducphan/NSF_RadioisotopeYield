@@ -39,6 +39,7 @@ int main(int argc, char **argv) {
     runManager->SetUserInitialization(physicsList);
     runManager->SetUserInitialization(new ActionInitialization(energyInMeV));
 
+    runManager->SetNumberOfThreads(24);
     runManager->Initialize();
     detectorConstruction->CreateImportanceStore();
 
