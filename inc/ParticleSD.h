@@ -26,4 +26,7 @@ public:
     explicit ParticleSD(const G4String &name);
     ~ParticleSD() override;
     G4bool  ProcessHits(G4Step*, G4TouchableHistory*) override;
+
+private:
+    G4ParticleDefinition* DeuteronDefinition;
 };
