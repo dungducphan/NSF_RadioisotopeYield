@@ -8,6 +8,7 @@ RunAction::RunAction(const double &energyInMeV) : G4UserRunAction(), PrimaryEner
 
     AnalysisManager->CreateNtuple("DeuteronNTuple", "DeuteronNTuple");
     AnalysisManager->CreateNtupleDColumn("Energy");
+    AnalysisManager->CreateNtupleDColumn("Weight");
     AnalysisManager->FinishNtuple(0);
 }
 

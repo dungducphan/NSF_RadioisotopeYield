@@ -19,6 +19,7 @@ G4bool ParticleSD::ProcessHits(G4Step * aStep, G4TouchableHistory *) {
 
     G4AnalysisManager *man = G4AnalysisManager::Instance();
     man->FillNtupleDColumn(0, energy / MeV);
+    man->FillNtupleDColumn(1, aStep->GetTrack()->GetWeight());
     man->AddNtupleRow();
 
     aStep->GetTrack()->SetTrackStatus(fStopAndKill);
