@@ -6,9 +6,9 @@
 DetectorConstruction::DetectorConstruction() :  G4VUserDetectorConstruction() {
     CheckOverlaps = true;
 
-    VoidThickness = 1.5 * mm;
+    VoidThickness = 0 * mm;
     TotalHeavyWaterThickness = 0.5 * mm;
-    NumberOfHeavyWaterLayers = 1;
+    NumberOfHeavyWaterLayers = 5;
     HeavyWaterCellThickness = TotalHeavyWaterThickness / NumberOfHeavyWaterLayers;
     TotalShieldingThickness = 0.3 * mm;
     NumberOfShieldingLayers = 1;
@@ -51,7 +51,6 @@ G4VPhysicalVolume *DetectorConstruction::Construct() {
     auto VAShielding = new G4VisAttributes();
     VAShielding->SetForceSolid();
     VAShielding->SetColour(1., 0., 0., 0.3);
-//    VAShielding->SetVisibility(false);
     for (unsigned int i = 0; i < NumberOfShieldingLayers; i++) {
         ShieldingSphere.emplace_back(new G4Sphere(Form("ShieldingCell_%02i", i), VoidThickness + TotalHeavyWaterThickness + ShieldingCellThickness * (double) i, VoidThickness + TotalHeavyWaterThickness + ShieldingCellThickness * (double) (i + 1), 0., 360. * deg, 0., 180. * deg));
         ShieldingLogicalVolume.emplace_back(new G4LogicalVolume(ShieldingSphere[i], ShieldingMaterial, Form("ShieldingLogicalCell_%02i", i)));
@@ -63,7 +62,6 @@ G4VPhysicalVolume *DetectorConstruction::Construct() {
     auto VADetector = new G4VisAttributes();
     VADetector->SetForceSolid();
     VADetector->SetColour(0., 1., 0., 0.1);
-//    VADetector->SetVisibility(false);
     for (unsigned int i = 0; i < NumberOfDetectorLayers; i++) {
         DetectorSphere.emplace_back(new G4Sphere(Form("DetectorCell_%02i", i), VoidThickness + TotalShieldingThickness + TotalHeavyWaterThickness + DetectorCellThickness * (double) i, VoidThickness + TotalShieldingThickness + TotalHeavyWaterThickness + DetectorCellThickness * (double) (i + 1), 0., 360. * deg, 0., 180. * deg));
         DetectorLogicalVolume.emplace_back(new G4LogicalVolume(DetectorSphere[i], DetectorMaterial, Form("DetectorLogicalCell_%02i", i)));
@@ -76,7 +74,7 @@ G4VPhysicalVolume *DetectorConstruction::Construct() {
 
 void DetectorConstruction::ConstructSDandField() {
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    ParticleSD* aSensitiveDetector = new ParticleSD("IonSD");
+    auto aSensitiveDetector = new ParticleSD("IonSD");
     SDman->AddNewDetector(aSensitiveDetector);
 
     // Detect the radioisotopes in the detector
@@ -103,16 +101,16 @@ void DetectorConstruction::DefineMaterials() {
 G4VIStore* DetectorConstruction::CreateImportanceStore() {
     G4IStore *istore = G4IStore::GetInstance();
 
-    istore->AddImportanceGeometryCell(1, *WorldPhysicalVolume);
-
-    for (unsigned int i = 0; i < NumberOfDetectorLayers; i++)
-        istore->AddImportanceGeometryCell(1, *DetectorPhysicalVolume[i]);
-
     for (unsigned int i = 0; i < NumberOfHeavyWaterLayers; i++)
-        istore->AddImportanceGeometryCell(TMath::Power(1, (double) i + 1), *HeavyWaterResidualPhysicalVolume[i]);
+        istore->AddImportanceGeometryCell(TMath::Power(2, (double) i), *HeavyWaterResidualPhysicalVolume[i]);
 
     for (unsigned int i = 0; i < NumberOfShieldingLayers; i++)
-        istore->AddImportanceGeometryCell(TMath::Power(1, (double) NumberOfHeavyWaterLayers + (double) i + 1), *ShieldingPhysicalVolume[i]);
+        istore->AddImportanceGeometryCell(TMath::Power(2, (double) NumberOfHeavyWaterLayers + (double) i - 1), *ShieldingPhysicalVolume[i]);
+
+    for (unsigned int i = 0; i < NumberOfDetectorLayers; i++)
+        istore->AddImportanceGeometryCell(TMath::Power(2, (double) (NumberOfHeavyWaterLayers + NumberOfShieldingLayers - 2)), *DetectorPhysicalVolume[i]);
+
+    istore->AddImportanceGeometryCell(TMath::Power(2, (double) (NumberOfHeavyWaterLayers + NumberOfShieldingLayers - 2)), *WorldPhysicalVolume);
 
     return istore;
 }

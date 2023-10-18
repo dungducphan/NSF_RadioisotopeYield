@@ -32,15 +32,15 @@ int main(int argc, char **argv) {
 
     auto detectorConstruction = new DetectorConstruction();
     runManager->SetUserInitialization(detectorConstruction);
-//    G4GeometrySampler mgs(detectorConstruction->GetWorldVolume(),"deuteron");
+    G4GeometrySampler mgs(detectorConstruction->GetWorldVolume(),"deuteron");
     auto physicsList = new QGSP_BIC_AllHP();
 //     physicsList->RegisterPhysics(new BiasingPhysics());
-//    physicsList->RegisterPhysics(new G4ImportanceBiasing(&mgs));
+    physicsList->RegisterPhysics(new G4ImportanceBiasing(&mgs));
     runManager->SetUserInitialization(physicsList);
     runManager->SetUserInitialization(new ActionInitialization(energyInMeV));
 
-//    runManager->Initialize();
-//    detectorConstruction->CreateImportanceStore();
+    runManager->Initialize();
+    detectorConstruction->CreateImportanceStore();
 
     G4VisManager *visManager = new G4VisExecutive;
     visManager->Initialize();

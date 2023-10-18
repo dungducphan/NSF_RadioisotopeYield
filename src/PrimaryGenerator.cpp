@@ -2,7 +2,7 @@
 
 PrimaryGenerator::PrimaryGenerator(const double &energyInMeV) : G4VUserPrimaryGeneratorAction() {
     GeneralParticleSource = new G4GeneralParticleSource();
-    GeneralParticleSource->SetNumberOfParticles(4800);
+    GeneralParticleSource->SetNumberOfParticles(1);
     G4SingleParticleSource *deuteronSrc = GeneralParticleSource->GetCurrentSource();
     G4ParticleDefinition *deuteronDef = G4ParticleTable::GetParticleTable()->FindParticle("deuteron");
     deuteronSrc->SetParticleDefinition(deuteronDef);
