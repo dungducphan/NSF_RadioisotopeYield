@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
     } else if (argv[1] == TString("Maxwellian")) {
         OutputName = "DoubleWeightedSpectrum_Maxwellian";
         Spectrum = new TF1("MaxwellianSpectrum", "TMath::Sqrt(2./TMath::Pi()) * (1./([0]*[0]*[0])) * x * x * exp((-1./([0]*[0])) * x * x)", 0, 50);
-        Spectrum->SetParameter(0, 2.0);
+        Spectrum->SetParameter(0, 3.0);
     } else {
         std::cout << "Usage: " << argv[0] << " <Exponential/Maxwellian>" << std::endl;
         return 0;
@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
     for (int i = 6; i < 51; i++) {
         TH1D* spectrum = nullptr;
         double scale_input = 0;
-        if (i < 11) {
+        if (i < 12) {
             spectrum = BuildSpectrumFromFile(i);
             scale_input = 1. / 100.;
         }  else {
