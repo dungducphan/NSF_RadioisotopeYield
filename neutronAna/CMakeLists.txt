@@ -13,10 +13,10 @@ find_package(ROOT REQUIRED Core Tree)
 
 include(${ROOT_USE_FILE})
 
-file(GLOB MACROS *.root)
-file(COPY ${MACROS} DESTINATION ${PROJECT_BINARY_DIR})
+file(GLOB MACROS Data/*.root)
+file(COPY ${MACROS} DESTINATION ${PROJECT_BINARY_DIR}/neutronAna/Data)
 
-set(EXECUTABLE_NAME Ana)
-include_directories(${PROJECT_SOURCE_DIR}/ana)
+set(EXECUTABLE_NAME NeutronAna)
+include_directories(${PROJECT_SOURCE_DIR}/neutronAna)
 add_executable(${EXECUTABLE_NAME} ana.cpp)
 target_link_libraries(${EXECUTABLE_NAME} ${ROOT_LIBRARIES})
