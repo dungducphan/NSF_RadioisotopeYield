@@ -7,6 +7,7 @@ RunAction::RunAction(const double &energyInkeV) : G4UserRunAction(), PrimaryEner
     if (G4Threading::IsMultithreadedApplication()) AnalysisManager->SetNtupleMerging(true);
 
     AnalysisManager->CreateNtuple("DeuteronNTuple", "DeuteronNTuple");
+    AnalysisManager->CreateNtupleDColumn("PDGCode");
     AnalysisManager->CreateNtupleDColumn("Energy");
     AnalysisManager->CreateNtupleDColumn("Weight");
     AnalysisManager->FinishNtuple(0);

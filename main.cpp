@@ -15,13 +15,16 @@ int main(int argc, char **argv) {
     G4UIExecutive *ui = nullptr;
 
     double energyInkeV = 0.0;
-    if (argc == 2) {
+    int noOfEvents = 0;
+    if (argc == 3) {
         ui = new G4UIExecutive(argc, argv);
         energyInkeV = std::stod(argv[1]);
-    } else if (argc == 3) {
+        noOfEvents = std::stoi(argv[2]);
+    } else if (argc == 4) {
         energyInkeV = std::stod(argv[1]);
+        noOfEvents = std::stoi(argv[2]);
     } else {
-        G4cout << "Usage: " << argv[0] << " <Primary Particle Energy in MeV> [optional: macro_file]" << G4endl;
+        G4cout << "Usage: " << argv[0] << " <Primary Particle Energy in keV> <Number of Events> [optional: --batchMode]" << G4endl;
         return 0;
     }
 
@@ -34,12 +37,12 @@ int main(int argc, char **argv) {
     runManager->SetUserInitialization(detectorConstruction);
     auto physicsList = new QGSP_BIC_AllHP();
     G4GeometrySampler mgs(detectorConstruction->GetWorldVolume(),"deuteron");
+    physicsList->RegisterPhysics(new BiasingPhysics());
     physicsList->RegisterPhysics(new G4ImportanceBiasing(&mgs));
-
     runManager->SetUserInitialization(physicsList);
-    runManager->SetUserInitialization(new ActionInitialization(energyInkeV));
+    runManager->SetUserInitialization(new ActionInitialization(detectorConstruction, energyInkeV));
 
-    runManager->SetNumberOfThreads(48);
+    runManager->SetNumberOfThreads(40);
     runManager->Initialize();
     detectorConstruction->CreateImportanceStore();
 
@@ -49,12 +52,11 @@ int main(int argc, char **argv) {
     G4UImanager *UIManager = G4UImanager::GetUIpointer();
 
     if (!ui) {
-        G4String command = "/control/execute ";
-        G4String fileName = argv[2];
-        UIManager->ApplyCommand(command + fileName);
+          runManager->BeamOn(noOfEvents);
     } else {
         UIManager->ApplyCommand("/control/execute vis.mac");
         ui->SessionStart();
+        runManager->BeamOn(noOfEvents);
         delete ui;
     }
 
