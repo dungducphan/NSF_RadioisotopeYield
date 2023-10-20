@@ -22,8 +22,9 @@
 #include <G4VPrimitiveScorer.hh>
 #include <G4THitsMap.hh>
 #include <G4VIStore.hh>
+#include <G4IStore.hh>
 
-
+#include <TString.h>
 #include <TMath.h>
 
 class DetectorConstruction : public G4VUserDetectorConstruction {
@@ -39,7 +40,6 @@ public:
 
     void DefineMaterials();
 
-private:
     bool CheckOverlaps;
 
     G4NistManager* NISTManager;
@@ -50,11 +50,9 @@ private:
     G4double TotalDetectorThickness;
     G4double HeavyWaterCellThickness;
     G4double ShieldingCellThickness;
-    G4double DetectorCellThickness;
     G4double VoidThickness;
     G4int    NumberOfHeavyWaterLayers;
     G4int    NumberOfShieldingLayers;
-    G4int    NumberOfDetectorLayers;
 
     G4Material* WorldMaterial;
     G4Material* HeavyWaterResidualMaterial;
@@ -73,7 +71,7 @@ private:
     std::vector<G4LogicalVolume*> ShieldingLogicalVolume;
     std::vector<G4VPhysicalVolume*> ShieldingPhysicalVolume;
 
-    std::vector<G4Sphere*> DetectorSphere;
-    std::vector<G4LogicalVolume*> DetectorLogicalVolume;
-    std::vector<G4VPhysicalVolume*> DetectorPhysicalVolume;
+    G4Sphere* DetectorSphere;
+    G4LogicalVolume* DetectorLogicalVolume;
+    G4VPhysicalVolume* DetectorPhysicalVolume;
 };

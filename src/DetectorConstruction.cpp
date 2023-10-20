@@ -1,7 +1,4 @@
 #include <DetectorConstruction.h>
-#include <ParticleSD.h>
-
-#include <G4IStore.hh>
 
 DetectorConstruction::DetectorConstruction() :  G4VUserDetectorConstruction() {
     CheckOverlaps = true;
@@ -14,8 +11,6 @@ DetectorConstruction::DetectorConstruction() :  G4VUserDetectorConstruction() {
     NumberOfShieldingLayers = 4;
     ShieldingCellThickness = TotalShieldingThickness / NumberOfShieldingLayers;
     TotalDetectorThickness = 1 * mm;
-    NumberOfDetectorLayers = 1;
-    DetectorCellThickness = TotalDetectorThickness / NumberOfDetectorLayers;
     WorldSize = TotalHeavyWaterThickness + TotalShieldingThickness + TotalDetectorThickness + 1 * mm;
 }
 
@@ -58,28 +53,19 @@ G4VPhysicalVolume *DetectorConstruction::Construct() {
         ShieldingPhysicalVolume.emplace_back(new G4PVPlacement(nullptr, G4ThreeVector(), ShieldingLogicalVolume[i], Form("ShieldingPhysicalCell_%02i", i), WorldLogicalVolume, false, 0, CheckOverlaps));
     }
 
-    // Detector volumes
+    // Detector volume
     auto VADetector = new G4VisAttributes();
     VADetector->SetForceSolid();
     VADetector->SetColour(0., 1., 0., 0.1);
-    for (unsigned int i = 0; i < NumberOfDetectorLayers; i++) {
-        DetectorSphere.emplace_back(new G4Sphere(Form("DetectorCell_%02i", i), VoidThickness + TotalShieldingThickness + TotalHeavyWaterThickness + DetectorCellThickness * (double) i, VoidThickness + TotalShieldingThickness + TotalHeavyWaterThickness + DetectorCellThickness * (double) (i + 1), 0., 360. * deg, 0., 180. * deg));
-        DetectorLogicalVolume.emplace_back(new G4LogicalVolume(DetectorSphere[i], DetectorMaterial, Form("DetectorLogicalCell_%02i", i)));
-        DetectorLogicalVolume[i]->SetVisAttributes(VADetector);
-        DetectorPhysicalVolume.push_back(new G4PVPlacement(nullptr, G4ThreeVector(), DetectorLogicalVolume[i], Form("DetectorPhysicalCell_%02i", i), WorldLogicalVolume, false, 0, CheckOverlaps));
-    }
+    DetectorSphere = new G4Sphere("DetectorSphere", VoidThickness + TotalShieldingThickness + TotalHeavyWaterThickness, VoidThickness + TotalShieldingThickness + TotalHeavyWaterThickness + TotalDetectorThickness, 0., 360. * deg, 0., 180. * deg);
+    DetectorLogicalVolume = new G4LogicalVolume(DetectorSphere, DetectorMaterial, "DetectorLogicalVolume");
+    DetectorPhysicalVolume = new G4PVPlacement(nullptr, G4ThreeVector(), DetectorLogicalVolume, "DetectorPhysicalVolume", WorldLogicalVolume, false, 0, CheckOverlaps);
+    DetectorLogicalVolume->SetVisAttributes(VADetector);
 
     return WorldPhysicalVolume;
 }
 
 void DetectorConstruction::ConstructSDandField() {
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    auto aSensitiveDetector = new ParticleSD("IonSD");
-    SDman->AddNewDetector(aSensitiveDetector);
-
-    // Detect the radioisotopes in the detector
-    for (unsigned int i = 0; i < NumberOfDetectorLayers; i++)
-        SetSensitiveDetector(DetectorLogicalVolume[i], aSensitiveDetector);
 }
 
 void DetectorConstruction::DefineMaterials() {
@@ -107,10 +93,8 @@ G4VIStore* DetectorConstruction::CreateImportanceStore() {
     for (unsigned int i = 0; i < NumberOfShieldingLayers; i++)
         istore->AddImportanceGeometryCell(TMath::Power(2, (double) NumberOfHeavyWaterLayers + (double) i - 1), *ShieldingPhysicalVolume[i]);
 
-    for (unsigned int i = 0; i < NumberOfDetectorLayers; i++)
-        istore->AddImportanceGeometryCell(TMath::Power(2, (double) (NumberOfHeavyWaterLayers + NumberOfShieldingLayers + (double) i - 2)), *DetectorPhysicalVolume[i]);
-
-    istore->AddImportanceGeometryCell(TMath::Power(2, (double) (NumberOfHeavyWaterLayers + NumberOfShieldingLayers + NumberOfDetectorLayers - 3)), *WorldPhysicalVolume);
+    istore->AddImportanceGeometryCell(TMath::Power(2, (double) (NumberOfHeavyWaterLayers + NumberOfShieldingLayers - 2)), *DetectorPhysicalVolume);
+    istore->AddImportanceGeometryCell(TMath::Power(2, (double) (NumberOfHeavyWaterLayers + NumberOfShieldingLayers - 2)), *WorldPhysicalVolume);
 
     return istore;
 }

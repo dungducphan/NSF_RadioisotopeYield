@@ -22,6 +22,6 @@ void BiasingPhysics::BiasingDeuteronHPCrossSection() {
         }
     }
     if (theHadronicInelasticProc) {
-        theHadronicInelasticProc->BiasCrossSectionByFactor(1E9);
+        theHadronicInelasticProc->BiasCrossSectionByFactor(1E3);
     }
 }
