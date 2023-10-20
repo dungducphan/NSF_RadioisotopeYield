@@ -14,12 +14,12 @@
 int main(int argc, char **argv) {
     G4UIExecutive *ui = nullptr;
 
-    double energyInMeV = 0.0;
+    double energyInkeV = 0.0;
     if (argc == 2) {
         ui = new G4UIExecutive(argc, argv);
-        energyInMeV = std::stod(argv[1]);
+        energyInkeV = std::stod(argv[1]);
     } else if (argc == 3) {
-        energyInMeV = std::stod(argv[1]);
+        energyInkeV = std::stod(argv[1]);
     } else {
         G4cout << "Usage: " << argv[0] << " <Primary Particle Energy in MeV> [optional: macro_file]" << G4endl;
         return 0;
@@ -33,18 +33,15 @@ int main(int argc, char **argv) {
     auto detectorConstruction = new DetectorConstruction();
     runManager->SetUserInitialization(detectorConstruction);
     auto physicsList = new QGSP_BIC_AllHP();
-    if (energyInMeV >= 6 && energyInMeV <= 16) {
-        G4GeometrySampler mgs(detectorConstruction->GetWorldVolume(),"deuteron");
-        physicsList->RegisterPhysics(new G4ImportanceBiasing(&mgs));
-    }
-    runManager->SetUserInitialization(physicsList);
-    runManager->SetUserInitialization(new ActionInitialization(energyInMeV));
+    G4GeometrySampler mgs(detectorConstruction->GetWorldVolume(),"deuteron");
+    physicsList->RegisterPhysics(new G4ImportanceBiasing(&mgs));
 
-    runManager->SetNumberOfThreads(24);
+    runManager->SetUserInitialization(physicsList);
+    runManager->SetUserInitialization(new ActionInitialization(energyInkeV));
+
+    runManager->SetNumberOfThreads(48);
     runManager->Initialize();
-    if (energyInMeV >= 6 && energyInMeV <= 16) {
-        detectorConstruction->CreateImportanceStore();
-    }
+    detectorConstruction->CreateImportanceStore();
 
     G4VisManager *visManager = new G4VisExecutive;
     visManager->Initialize();

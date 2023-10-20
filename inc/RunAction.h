@@ -9,11 +9,11 @@
 
 class RunAction : public G4UserRunAction {
 public:
-    explicit RunAction(const double &energyInMeV);
+    explicit RunAction(const double &energyInkeV);
     ~RunAction() override;
 
     void BeginOfRunAction(const G4Run* run) override;
     void EndOfRunAction(const G4Run* run) override;
 
-    double PrimaryEnergyInMeV;
+    double PrimaryEnergyInkeV;
 };

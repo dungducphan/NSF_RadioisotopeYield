@@ -7,13 +7,13 @@ DetectorConstruction::DetectorConstruction() :  G4VUserDetectorConstruction() {
     CheckOverlaps = true;
 
     VoidThickness = 0 * mm;
-    TotalHeavyWaterThickness = 0.5 * mm;
+    TotalHeavyWaterThickness = 1 * mm;
     NumberOfHeavyWaterLayers = 5;
     HeavyWaterCellThickness = TotalHeavyWaterThickness / NumberOfHeavyWaterLayers;
-    TotalShieldingThickness = 0.3 * mm;
-    NumberOfShieldingLayers = 3;
+    TotalShieldingThickness = 4 * mm;
+    NumberOfShieldingLayers = 4;
     ShieldingCellThickness = TotalShieldingThickness / NumberOfShieldingLayers;
-    TotalDetectorThickness = 0.1 * mm;
+    TotalDetectorThickness = 1 * mm;
     NumberOfDetectorLayers = 1;
     DetectorCellThickness = TotalDetectorThickness / NumberOfDetectorLayers;
     WorldSize = TotalHeavyWaterThickness + TotalShieldingThickness + TotalDetectorThickness + 1 * mm;
