@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
     for (int i = 6; i < 51; i++) {
         TH1D* spectrum = nullptr;
         double scale_input = 0;
-        if (i < 12) {
+        if (i < 13) {
             spectrum = BuildSpectrumFromFile(i);
             scale_input = 1. / 100.;
         }  else {
