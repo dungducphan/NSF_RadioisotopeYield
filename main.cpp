@@ -1,3 +1,5 @@
+#include <thread>
+
 #include <G4MTRunManager.hh>
 #include <QGSP_BIC_AllHP.hh>
 #include <G4SteppingVerbose.hh>
@@ -42,7 +44,7 @@ int main(int argc, char **argv) {
     runManager->SetUserInitialization(physicsList);
     runManager->SetUserInitialization(new ActionInitialization(detectorConstruction, energyInkeV));
 
-    runManager->SetNumberOfThreads(40);
+    runManager->SetNumberOfThreads((G4int) std::thread::hardware_concurrency() - 4);
     runManager->Initialize();
     detectorConstruction->CreateImportanceStore();
 
