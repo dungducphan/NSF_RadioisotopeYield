@@ -39,7 +39,6 @@ int main(int argc, char **argv) {
     runManager->SetUserInitialization(detectorConstruction);
     auto physicsList = new QGSP_BIC_AllHP();
     G4GeometrySampler mgs(detectorConstruction->GetWorldVolume(),"deuteron");
-    physicsList->RegisterPhysics(new BiasingPhysics());
     physicsList->RegisterPhysics(new G4ImportanceBiasing(&mgs));
     runManager->SetUserInitialization(physicsList);
     runManager->SetUserInitialization(new ActionInitialization(detectorConstruction, energyInkeV));
