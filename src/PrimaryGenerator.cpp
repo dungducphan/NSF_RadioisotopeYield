@@ -1,8 +1,8 @@
 #include <PrimaryGenerator.h>
 
-PrimaryGenerator::PrimaryGenerator() : G4VUserPrimaryGeneratorAction() {
-    GeneralParticleSource = std::make_unique<G4GeneralParticleSource>();
-    GeneralParticleSource->SetNumberOfParticles(48);
+PrimaryGenerator::PrimaryGenerator(const double &energyInkeV) : G4VUserPrimaryGeneratorAction() {
+    GeneralParticleSource = new G4GeneralParticleSource();
+    GeneralParticleSource->SetNumberOfParticles(400);
     G4SingleParticleSource *deuteronSrc = GeneralParticleSource->GetCurrentSource();
     G4ParticleDefinition *deuteronDef = G4ParticleTable::GetParticleTable()->FindParticle("deuteron");
     deuteronSrc->SetParticleDefinition(deuteronDef);
@@ -10,9 +10,8 @@ PrimaryGenerator::PrimaryGenerator() : G4VUserPrimaryGeneratorAction() {
     deuteronSrc->GetPosDist()->SetCentreCoords(G4ThreeVector(0., 0., 0.));
     deuteronSrc->GetPosDist()->ConfineSourceToVolume("NULL");
     deuteronSrc->GetAngDist()->SetAngDistType("iso");
-    deuteronSrc->GetEneDist()->SetEnergyDisType("Gauss");
-    deuteronSrc->GetEneDist()->SetMonoEnergy(5 * MeV);
-    deuteronSrc->GetEneDist()->SetBeamSigmaInE(0.1 * MeV);
+    deuteronSrc->GetEneDist()->SetEnergyDisType("Mono");
+    deuteronSrc->GetEneDist()->SetMonoEnergy(energyInkeV * keV);
 }
 
 PrimaryGenerator::~PrimaryGenerator() = default;

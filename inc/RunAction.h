@@ -9,12 +9,11 @@
 
 class RunAction : public G4UserRunAction {
 public:
-    RunAction();
+    explicit RunAction(const double &energyInkeV);
     ~RunAction() override;
 
     void BeginOfRunAction(const G4Run* run) override;
     void EndOfRunAction(const G4Run* run) override;
 
-private:
-    std::unique_ptr<G4AnalysisManager> AnalysisManager;
+    double PrimaryEnergyInkeV;
 };

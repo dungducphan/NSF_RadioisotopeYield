@@ -13,7 +13,7 @@ include(${ROOT_USE_FILE})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/inc/*.h)
 
-file(GLOB MACROS *.mac)
+file(GLOB MACROS *.mac *.sh)
 
 file(COPY ${MACROS} DESTINATION ${PROJECT_BINARY_DIR})
 file(COPY ${EXT_DATA} DESTINATION ${PROJECT_BINARY_DIR})
@@ -23,3 +23,6 @@ include_directories(${PROJECT_SOURCE_DIR}/inc)
 add_executable(${EXECUTABLE_NAME} main.cpp ${sources} ${headers})
 target_link_libraries(${EXECUTABLE_NAME} ${Geant4_LIBRARIES})
 target_link_libraries(${EXECUTABLE_NAME} ${ROOT_LIBRARIES})
+
+add_subdirectory(ana)
+add_subdirectory(neutronAna)

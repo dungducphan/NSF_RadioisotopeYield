@@ -1,14 +1,19 @@
 #include <ActionInitialization.h>
 
-ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
+ActionInitialization::ActionInitialization(DetectorConstruction* detector, const double &energyInkeV)
+: G4VUserActionInitialization(),
+  Detector(detector),
+  PrimaryEnergyInkeV(energyInkeV) {
+}
 
 ActionInitialization::~ActionInitialization() = default;
 
 void ActionInitialization::BuildForMaster() const {
-    SetUserAction(new RunAction());
+    SetUserAction(new RunAction(PrimaryEnergyInkeV));
 }
 
 void ActionInitialization::Build() const {
-    SetUserAction(new PrimaryGenerator());
-    SetUserAction(new RunAction());
+    SetUserAction(new PrimaryGenerator(PrimaryEnergyInkeV));
+    SetUserAction(new RunAction(PrimaryEnergyInkeV));
+    SetUserAction(new SteppingAction(Detector));
 }

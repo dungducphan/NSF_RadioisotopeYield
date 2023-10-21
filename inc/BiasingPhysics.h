@@ -8,4 +8,7 @@ public:
 
     void ConstructParticle() override;
     void ConstructProcess() override;
+
+private:
+    static void BiasingDeuteronHPCrossSection();
 };
