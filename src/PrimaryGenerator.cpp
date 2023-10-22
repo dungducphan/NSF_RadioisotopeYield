@@ -10,8 +10,8 @@ PrimaryGenerator::PrimaryGenerator(const double &energyInkeV) : G4VUserPrimaryGe
     deuteronSrc->GetPosDist()->SetCentreCoords(G4ThreeVector(0., 0., 0.));
     deuteronSrc->GetPosDist()->ConfineSourceToVolume("NULL");
     deuteronSrc->GetAngDist()->SetAngDistType("iso");
-    deuteronSrc->GetEneDist()->SetEnergyDisType("Mono");
-    deuteronSrc->GetEneDist()->SetMonoEnergy(energyInkeV * keV);
+    deuteronSrc->GetEneDist()->SetEnergyDisType("Exp");
+    deuteronSrc->GetEneDist()->SetEzero(4.34 * MeV);
 }
 
 PrimaryGenerator::~PrimaryGenerator() = default;
