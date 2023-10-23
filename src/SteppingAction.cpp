@@ -9,7 +9,6 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep) {
     G4VPhysicalVolume* postVolume = aStep->GetPostStepPoint()->GetTouchableHandle()->GetVolume();
 
     if (postVolume == Detector->DetectorPhysicalVolume) {
-        // G4cout << aStep->GetTrack()->GetParticleDefinition()->GetParticleName() << " : " << aStep->GetTrack()->GetDynamicParticle()->GetPDGcode() << G4endl;
         SaveParticleData(aStep);
         aStep->GetTrack()->SetTrackStatus(fStopAndKill);
     } else return;
