@@ -24,5 +24,4 @@ add_executable(${EXECUTABLE_NAME} main.cpp ${sources} ${headers})
 target_link_libraries(${EXECUTABLE_NAME} ${Geant4_LIBRARIES})
 target_link_libraries(${EXECUTABLE_NAME} ${ROOT_LIBRARIES})
 
-add_subdirectory(ana)
 add_subdirectory(neutronAna)
