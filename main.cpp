@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
     runManager->SetUserInitialization(physicsList);
     runManager->SetUserInitialization(new ActionInitialization(detectorConstruction, energyInkeV));
 
-    runManager->SetNumberOfThreads((G4int) std::thread::hardware_concurrency() - 4);
+//    runManager->SetNumberOfThreads((G4int) std::thread::hardware_concurrency() - 4);
     runManager->Initialize();
     detectorConstruction->CreateImportanceStore();
 

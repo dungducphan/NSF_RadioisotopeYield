@@ -1,27 +1,31 @@
 void neutron() {
-    auto file = TFile::Open(Form("Neutron.root"), "READ");
-    auto tree = (TTree*) file->Get("NeutronNTuple");
+//    auto file = TFile::Open(Form("Neutron.root"), "READ");
+//    auto tree = (TTree*) file->Get("NeutronNTuple");
+//
+//
+//    TH1D* ShieldedNeutrons = new TH1D(Form("NeutronSpectrum"), ";Energy (MeV); Unnormalized Count (per 100 keV)", 50, 0, 5);
+//    TH1D* ShieldedGammas = new TH1D(Form("GammaSpectrum"), ";Energy (MeV); Unnormalized Count (per 100 keV)", 50, 0, 5);
+//
+//    double pdgCode;
+//    double energy;
+//    double weight;
+//    tree->SetBranchAddress("PDGCode", &pdgCode);
+//    tree->SetBranchAddress("Energy", &energy);
+//    tree->SetBranchAddress("Weight", &weight);
+//    for (int i = 0; i < tree->GetEntries(); ++i) {
+//        tree->GetEntry(i);
+//        if (pdgCode == 2112) {
+//            ShieldedNeutrons->Fill(energy, weight);
+//        } else if (pdgCode == 22) {
+//            ShieldedGammas->Fill(energy, weight);
+//        } else {
+//            continue;
+//        }
+//    }
 
-
-    TH1D* ShieldedNeutrons = new TH1D(Form("NeutronSpectrum"), ";Energy (MeV); Unnormalized Count (per 100 keV)", 50, 0, 5);
-    TH1D* ShieldedGammas = new TH1D(Form("GammaSpectrum"), ";Energy (MeV); Unnormalized Count (per 100 keV)", 50, 0, 5);
-
-    double pdgCode;
-    double energy;
-    double weight;
-    tree->SetBranchAddress("PDGCode", &pdgCode);
-    tree->SetBranchAddress("Energy", &energy);
-    tree->SetBranchAddress("Weight", &weight);
-    for (int i = 0; i < tree->GetEntries(); ++i) {
-        tree->GetEntry(i);
-        if (pdgCode == 2112) {
-            ShieldedNeutrons->Fill(energy, weight);
-        } else if (pdgCode == 22) {
-            ShieldedGammas->Fill(energy, weight);
-        } else {
-            continue;
-        }
-    }
+    TFile* file = TFile::Open(Form("Out.root"), "READ");
+    TH1D* ShieldedNeutrons = (TH1D*) file->Get("NeutronSpectrum");
+    TH1D* ShieldedGammas = (TH1D*) file->Get("GammaSpectrum");
 
     gStyle->SetOptStat(0);
 
@@ -41,7 +45,7 @@ void neutron() {
     ShieldedNeutrons->SetTitleOffset(1.50, "Y");
     ShieldedNeutrons->SetTitleSize(0.04, "XY");
     ShieldedNeutrons->SetNdivisions(505, "XY");
-    ShieldedNeutrons->GetYaxis()->SetRangeUser(0, 2E5);
+    ShieldedNeutrons->GetYaxis()->SetRangeUser(0, 4E6);
     ShieldedNeutrons->GetXaxis()->SetMaxDigits(2);
     ShieldedNeutrons->GetYaxis()->SetMaxDigits(3);
 
@@ -58,8 +62,11 @@ void neutron() {
     c->SaveAs(Form("ShieldedSpectrum.pdf"));
     c->SaveAs(Form("ShieldedSpectrum.png"));
 
-    ShieldedNeutrons->GetYaxis()->SetRangeUser(1E-2, 1E6);
+    ShieldedNeutrons->GetYaxis()->SetRangeUser(1E0, 1E7);
     c->SetLogy();
     c->SaveAs(Form("ShieldedSpectrumLogy.pdf"));
     c->SaveAs(Form("ShieldedSpectrumLogy.png"));
+
+    std::cout << ShieldedNeutrons->Integral() << std::endl;
+    std::cout << ShieldedGammas->Integral() << std::endl;
 }
