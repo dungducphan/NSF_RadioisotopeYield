@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
     auto detectorConstruction = new DetectorConstruction();
     runManager->SetUserInitialization(detectorConstruction);
     auto physicsList = new QGSP_BIC_AllHP();
-    G4GeometrySampler mgs(detectorConstruction->GetWorldVolume(),"deuteron");
+    G4GeometrySampler mgs(detectorConstruction->GetWorldVolume(),"neutron");
     physicsList->RegisterPhysics(new G4ImportanceBiasing(&mgs));
     runManager->SetUserInitialization(physicsList);
     runManager->SetUserInitialization(new ActionInitialization(detectorConstruction, energyInkeV));
