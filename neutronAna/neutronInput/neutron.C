@@ -32,6 +32,11 @@ void neutron() {
     auto c = new TCanvas( "c", "c", 900, 900);
     c->SetMargin(0.15, 0.05, 0.15, 0.05);
 
+    ShieldedNeutrons->Scale(1. / 8E6);
+    ShieldedNeutrons->GetYaxis()->SetTitle("Counts (per 100 keV)");
+    ShieldedGammas->Scale(1. / 8E6);
+    ShieldedGammas->GetYaxis()->SetTitle("Counts (per 100 keV)");
+
     ShieldedNeutrons->SetLineColor(kRed);
     ShieldedNeutrons->SetLineWidth(3);
     ShieldedGammas->SetLineColor(kBlue);
@@ -45,7 +50,7 @@ void neutron() {
     ShieldedNeutrons->SetTitleOffset(1.50, "Y");
     ShieldedNeutrons->SetTitleSize(0.04, "XY");
     ShieldedNeutrons->SetNdivisions(505, "XY");
-    ShieldedNeutrons->GetYaxis()->SetRangeUser(0, 4E6);
+    ShieldedNeutrons->GetYaxis()->SetRangeUser(0, 0.4);
     ShieldedNeutrons->GetXaxis()->SetMaxDigits(2);
     ShieldedNeutrons->GetYaxis()->SetMaxDigits(3);
 
@@ -62,7 +67,7 @@ void neutron() {
     c->SaveAs(Form("ShieldedSpectrum.pdf"));
     c->SaveAs(Form("ShieldedSpectrum.png"));
 
-    ShieldedNeutrons->GetYaxis()->SetRangeUser(1E0, 1E7);
+    ShieldedNeutrons->GetYaxis()->SetRangeUser(1E-7, 1);
     c->SetLogy();
     c->SaveAs(Form("ShieldedSpectrumLogy.pdf"));
     c->SaveAs(Form("ShieldedSpectrumLogy.png"));
