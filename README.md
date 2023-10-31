@@ -1,12 +1,10 @@
 # NSF_IonShielding
 
-Design analysis for ion shielding in heavy water fusion experiment.
+This repo is a clone of `NSF_IonShielding` (https://github.com/dungducphan/NSF_IonShielding). 
 
-To design the target and shielding for the laser-driven fusion experiment. In this experiment, D20 ice will be\
-irradiated by a high-intensity laser to produce fusion reaction. The fusion reaction will produce high energy\
-deuteron beam. The deuterons will undergo fusion reaction to produce neutrons. The neutrons will be used to study the\
-rapid neutron capture reactions in a Rhodium target. The shielding is designed to protect the target from the\
-irradiation of deuteron beam.
+From the `NSF_IonShielding` simulation, we know that 4mm of Pb shielding together with 1mm of residual heavy water layer is sufficient to shield all deuterons upto 30 MeV. However, the deuteron beam will still interact with the shielding materials and produce tertiaries such as neutrons and gammas. The spectra and yields of tertiaries are summarized in the Overleaf document (https://www.overleaf.com/project/6532e3b5746498e4e24f7690).
+
+The focus of this repo is the Geant4 simulation of Radioisotope Yield due to the interactions of tertiary particles such as neutron and gammas with the nuclear waiting materials (Rh and Au, in this study).
 
 # Installation
 ## Dependencies
@@ -19,9 +17,9 @@ irradiation of deuteron beam.
 ## Build Instructions
 
 ```bash
-cd /path/to/NSF_IonShielding
-git clone git@github.com:dungducphan/NSF_IonShielding.git
+cd /path/to/NSF_RadioisotopeYield
+git clone git@github.com:dungducphan/NSF_RadioisotopeYield.git
 mkdir build
 cd build
-cmake ../NSF_IonShielding -GNinja
+cmake ../NSF_RadioisotopeYield -GNinja
 ```
