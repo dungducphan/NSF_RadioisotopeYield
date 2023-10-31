@@ -68,7 +68,7 @@ TH1D* GetShieldedSpectrum(TF1* InputSpectrum, const int& pdgCode) {
         RawSpectra.emplace_back(spectrum, scale_output);
     }
 
-    TH1D* DoubleWeightedSpectrum = new TH1D(Form("%sSpectrum", ShieldedParticleName.Data()), ";Energy (MeV); Normalized Count (per MeV)", 60, 0, 30);
+    TH1D* DoubleWeightedSpectrum = new TH1D(Form("%sSpectrum", ShieldedParticleName.Data()), ";Energy (MeV); Normalized Count (per 500 keV)", 60, 0, 30);
     for (auto& spectrum : RawSpectra) {
         auto hist = std::get<0>(spectrum);
         double scale = std::get<1>(spectrum);
@@ -85,6 +85,14 @@ void Plotting(TH1D* ShieldedNeutrons, TH1D* ShieldedGammas) {
     auto c = new TCanvas( "c", "c", 900, 900);
     c->SetMargin(0.15, 0.05, 0.15, 0.05);
 
+    ShieldedNeutrons->Scale(1. / 1.2E7);
+    ShieldedNeutrons->GetYaxis()->SetTitle("Counts (per 500 keV)");
+    ShieldedGammas->Scale(1. / 1.2E7);
+    ShieldedGammas->GetYaxis()->SetTitle("Counts (per 500 keV)");
+
+    std::cout << "Neutrons: " << ShieldedNeutrons->Integral() << std::endl;
+    std::cout << "Gammas: " << ShieldedGammas->Integral() << std::endl;
+
     ShieldedNeutrons->SetLineColor(kRed);
     ShieldedNeutrons->SetLineWidth(3);
     ShieldedGammas->SetLineColor(kBlue);
@@ -98,7 +106,7 @@ void Plotting(TH1D* ShieldedNeutrons, TH1D* ShieldedGammas) {
     ShieldedGammas->SetTitleOffset(1.50, "Y");
     ShieldedGammas->SetTitleSize(0.04, "XY");
     ShieldedGammas->SetNdivisions(505, "XY");
-    ShieldedGammas->GetYaxis()->SetRangeUser(0, 500);
+    ShieldedGammas->GetYaxis()->SetRangeUser(0, 5E-4);
     ShieldedGammas->GetXaxis()->SetMaxDigits(2);
     ShieldedGammas->GetYaxis()->SetMaxDigits(2);
 
@@ -115,7 +123,7 @@ void Plotting(TH1D* ShieldedNeutrons, TH1D* ShieldedGammas) {
     c->SaveAs(Form("ShieldedSpectrum.pdf"));
     c->SaveAs(Form("ShieldedSpectrum.png"));
 
-    ShieldedGammas->GetYaxis()->SetRangeUser(1E-4, 1000);
+    ShieldedGammas->GetYaxis()->SetRangeUser(1E-11, 1E-3);
     c->SetLogy();
     c->SaveAs(Form("ShieldedSpectrumLogy.pdf"));
     c->SaveAs(Form("ShieldedSpectrumLogy.png"));

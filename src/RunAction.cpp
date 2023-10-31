@@ -6,7 +6,7 @@ RunAction::RunAction(const double &energyInkeV) : G4UserRunAction(), PrimaryEner
     G4AnalysisManager* AnalysisManager = G4AnalysisManager::Instance();
     if (G4Threading::IsMultithreadedApplication()) AnalysisManager->SetNtupleMerging(true);
 
-    AnalysisManager->CreateNtuple("DeuteronNTuple", "DeuteronNTuple");
+    AnalysisManager->CreateNtuple("NeutronNTuple", "NeutronNTuple");
     AnalysisManager->CreateNtupleDColumn("PDGCode");
     AnalysisManager->CreateNtupleDColumn("Energy");
     AnalysisManager->CreateNtupleDColumn("Weight");
@@ -17,7 +17,7 @@ RunAction::~RunAction() = default;
 
 void RunAction::BeginOfRunAction(const G4Run* run) {
     G4AnalysisManager* AnalysisManager = G4AnalysisManager::Instance();
-    AnalysisManager->OpenFile(Form("DeuteronData_With_%05i_keV_Deuterons.root", (int) PrimaryEnergyInkeV));
+    AnalysisManager->OpenFile(Form("Neutron.root"));
 }
 
 void RunAction::EndOfRunAction(const G4Run* run) {
