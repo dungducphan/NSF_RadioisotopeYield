@@ -31,27 +31,27 @@ G4VPhysicalVolume *DetectorConstruction::Construct() {
     VAWorld->SetVisibility(false);
     WorldLogicalVolume->SetVisAttributes(VAWorld);
 
-    // Heavy Water volumes
-    auto VAHeavyWaterResidual = new G4VisAttributes();
-    VAHeavyWaterResidual->SetForceSolid();
-    VAHeavyWaterResidual->SetColour(0., 0., 1., 0.8);
-    for (unsigned int i = 0; i < NumberOfHeavyWaterLayers; i++) {
-        HeavyWaterResidualSphere.emplace_back(new G4Sphere(Form("HeavyWaterCell_%02i", i), VoidThickness + HeavyWaterCellThickness * (double) i, VoidThickness + HeavyWaterCellThickness * (double) (i + 1), 0., 360. * deg, 0., 180. * deg));
-        HeavyWaterResidualLogicalVolume.emplace_back(new G4LogicalVolume(HeavyWaterResidualSphere[i], HeavyWaterResidualMaterial, Form("HeavyWaterLogicalCell_%02i", i)));
-        HeavyWaterResidualLogicalVolume[i]->SetVisAttributes(VAHeavyWaterResidual);
-        HeavyWaterResidualPhysicalVolume.emplace_back(new G4PVPlacement(nullptr, G4ThreeVector(), HeavyWaterResidualLogicalVolume[i], Form("HeavyWaterPhysicalCell_%02i", i), WorldLogicalVolume, false, 0, CheckOverlaps));
-    }
-
-    // Shielding volumes
-    auto VAShielding = new G4VisAttributes();
-    VAShielding->SetForceSolid();
-    VAShielding->SetColour(1., 0., 0., 0.3);
-    for (unsigned int i = 0; i < NumberOfShieldingLayers; i++) {
-        ShieldingSphere.emplace_back(new G4Sphere(Form("ShieldingCell_%02i", i), VoidThickness + TotalHeavyWaterThickness + ShieldingCellThickness * (double) i, VoidThickness + TotalHeavyWaterThickness + ShieldingCellThickness * (double) (i + 1), 0., 360. * deg, 0., 180. * deg));
-        ShieldingLogicalVolume.emplace_back(new G4LogicalVolume(ShieldingSphere[i], ShieldingMaterial, Form("ShieldingLogicalCell_%02i", i)));
-        ShieldingLogicalVolume[i]->SetVisAttributes(VAShielding);
-        ShieldingPhysicalVolume.emplace_back(new G4PVPlacement(nullptr, G4ThreeVector(), ShieldingLogicalVolume[i], Form("ShieldingPhysicalCell_%02i", i), WorldLogicalVolume, false, 0, CheckOverlaps));
-    }
+//    // Heavy Water volumes
+//    auto VAHeavyWaterResidual = new G4VisAttributes();
+//    VAHeavyWaterResidual->SetForceSolid();
+//    VAHeavyWaterResidual->SetColour(0., 0., 1., 0.8);
+//    for (unsigned int i = 0; i < NumberOfHeavyWaterLayers; i++) {
+//        HeavyWaterResidualSphere.emplace_back(new G4Sphere(Form("HeavyWaterCell_%02i", i), VoidThickness + HeavyWaterCellThickness * (double) i, VoidThickness + HeavyWaterCellThickness * (double) (i + 1), 0., 360. * deg, 0., 180. * deg));
+//        HeavyWaterResidualLogicalVolume.emplace_back(new G4LogicalVolume(HeavyWaterResidualSphere[i], HeavyWaterResidualMaterial, Form("HeavyWaterLogicalCell_%02i", i)));
+//        HeavyWaterResidualLogicalVolume[i]->SetVisAttributes(VAHeavyWaterResidual);
+//        HeavyWaterResidualPhysicalVolume.emplace_back(new G4PVPlacement(nullptr, G4ThreeVector(), HeavyWaterResidualLogicalVolume[i], Form("HeavyWaterPhysicalCell_%02i", i), WorldLogicalVolume, false, 0, CheckOverlaps));
+//    }
+//
+//    // Shielding volumes
+//    auto VAShielding = new G4VisAttributes();
+//    VAShielding->SetForceSolid();
+//    VAShielding->SetColour(1., 0., 0., 0.3);
+//    for (unsigned int i = 0; i < NumberOfShieldingLayers; i++) {
+//        ShieldingSphere.emplace_back(new G4Sphere(Form("ShieldingCell_%02i", i), VoidThickness + TotalHeavyWaterThickness + ShieldingCellThickness * (double) i, VoidThickness + TotalHeavyWaterThickness + ShieldingCellThickness * (double) (i + 1), 0., 360. * deg, 0., 180. * deg));
+//        ShieldingLogicalVolume.emplace_back(new G4LogicalVolume(ShieldingSphere[i], ShieldingMaterial, Form("ShieldingLogicalCell_%02i", i)));
+//        ShieldingLogicalVolume[i]->SetVisAttributes(VAShielding);
+//        ShieldingPhysicalVolume.emplace_back(new G4PVPlacement(nullptr, G4ThreeVector(), ShieldingLogicalVolume[i], Form("ShieldingPhysicalCell_%02i", i), WorldLogicalVolume, false, 0, CheckOverlaps));
+//    }
 
     // Detector volume
     auto VADetector = new G4VisAttributes();
